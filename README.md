@@ -6,8 +6,10 @@
 
 Download the micro-ROS base Foxy image from the Docker Hub https://hub.docker.com/, then run a docker container.
 
+```bash
 sudo docker pull microros/base:foxy
 sudo docker run -it --net=host --privileged -v /dev/bus/usb:/dev/bus/usb microros/base:foxy
+```
 
 ### Create a ROS 2 workspace in the uros_ws folder of the docker container and build the package.
 
