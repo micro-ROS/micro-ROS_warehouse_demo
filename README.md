@@ -249,7 +249,7 @@ rosrun smach_viewer smach_viewer.py
 This repository is open-sourced under the Apache-2.0 license. See the LICENSE file for details.
 
 For a list of other open-source components included in this repository, see the
-file [3rd-party-licenses.txt](3rd-party-licenses.txt)
+file [3rd-party-licenses.txt](./3rd-party-licenses.txt)
 
 ## Known Issues/Limitations
 
