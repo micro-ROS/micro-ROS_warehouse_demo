@@ -36,7 +36,7 @@ In this set-up the different actors playing are:
 The robot communication interfaces are 
 
  * A Wireless network communication between a laptop and the robot.
- * A Low power wireless hardware
+ * A Low power wireless hardware, the 6LoWPAN atusb will be used.
 
 It goes without saying that there are more communication mediums, such as, the indoor positioning, CAN bus and ethernet bus. But these elements are complex and dealing with them goes beyond the scope of this document.
 ### Tool and environnement map map
@@ -56,13 +56,31 @@ Below a picture picturing the software map:
 
 ### Setting up the robot platform
 
-### Setting up monitoring laptop
+1. The robot platform will be running using ROS1 **noetic**. The following link should be read: 
+
+    * ROS 1 installation [http://wiki.ros.org/ROS/Installation](http://wiki.ros.org/ROS/Installation)
+    * ROS 1 usage [http://wiki.ros.org/ROS/Tutorials](http://wiki.ros.org/ROS/Tutorials)
+ 
+2. Install the ROS 1 package [uros_controller](uros_controller) as following. **Beware that the waypoints are set according to the PIAP's warehouse. Modifications should be done to one's usage**.
+
+3. Additionally to ROS1, ROS2 **foxy** shall be installed and run as explained below:
+
+    * Installation of ROS 2[https://index.ros.org/doc/ros2/Installation/#installationguide](https://index.ros.org/doc/ros2/Installation/#installationguide)
+    * ROS 2 usage [https://index.ros.org/doc/ros2/Tutorials/](https://index.ros.org/doc/ros2/Tutorials/) 
+
+
+### Setting up monitoring laptop (Optional)
+
+The different element for monitoring the robot platform:
+
+ * On the laptop,  only ROS1 has to be installed as in the first point of the [robot platform setup](#setting-up-the-robot-platform),
+ * The RVIZ package can be used as a monitoring software, more info: [http://wiki.ros.org/rviz](http://wiki.ros.org/rviz)
 
 ### Setting up the sensors
 
-#### Enviroment set up using docker
+#### Environment set up using docker
 
-Download the micro-ROS base Foxy image from the Docker Hub https://hub.docker.com/, then run a docker container.
+Download the micro-ROS base Foxy image from the [Docker Hub](https://hub.docker.com/), then run a docker container.
 
 ```bash
 sudo docker pull microros/base:foxy
@@ -93,7 +111,7 @@ git checkout -t origin/ucs_demo_f
 cd ..
 ```
 
-#### Configurate NUTTX tools to be able using the menuconfig application.
+#### Configure NUTTX tools to be able using the menuconfig application.
 
 ```bash
 git clone https://bitbucket.org/nuttx/tools.git firmware/tools
@@ -113,7 +131,7 @@ apt update
 apt install -y genromfs vim
 ```
 
-#### Complete configuration with micro-ros DEMO BOX messages and the convinient config file for flashing firmware,
+#### Complete configuration with micro-ros DEMO BOX messages and the convenient config file for flashing firmware,
 
 ```bash
 git clone http://10.0.9.18/abratek/uros-ucs.git ./tmp
@@ -176,6 +194,56 @@ cd /uros_ws/
 ros2 run micro_ros_setup build_firmware.sh
 ros2 run micro_ros_setup flash_firmware.sh
 ```
+
+## Run the sensors
+
+Powering the sensors is enough for them to start their application.
+
+## Run the application on the robot platform
+
+Finally, once everything is set-up, the coommand below should be executed:
+
+1. The ROS1/ROS2/ ROS bridge shall be launched
+
+```bash
+. <ros-install-dir>/setup.bash
+. <ros2-install-dir>/setup.bash
+export ROS_MASTER_URI=http://localhost:11311
+ros2 run ros1_bridge dynamic_bridge --bridge-all-2to1-topics 
+```
+
+2. Script to set-up the 6LoWPAN [wpan_atusb.sh](./scripts/wpan_atusb.sh)
+
+3. Run the docker:
+  
+    * Installation of docker [https://docs.docker.com/get-docker/](https://docs.docker.com/get-docker/)
+    * The agent execution: ``` docker run -it --net=host --rm microros/micro-ros-agent:foxy udp4 --port 9999 ```
+
+
+4. Execute the SMACH state machine using the the ROS1 environment: 
+
+    * ```rosrun uros_controller smach_node_mission1.py``` for mission 1,
+    * ```rosrun uros_controller smach_node_mission2.py``` for mission 2.
+
+## Run the monitoring application on the laptop
+
+The application to execute the run should in on terminal,
+
+```bash
+. <ros-install-dir>/setup.bash
+export ROS_MASTER_URI=http://IP_ADDR_ROBOT_PLATFORM:11311
+rviz
+
+```
+
+and in another terminal:
+
+```
+. <ros-install-dir>/setup.bash
+export ROS_MASTER_URI=http://IP_ADDR_ROBOT_PLATFORM:11311
+rosrun smach_viewer smach_viewer.py
+```
+
 ## License
 
 This repository is open-sourced under the Apache-2.0 license. See the LICENSE file for details.
