@@ -170,7 +170,7 @@ CFG_PROFILE=ucs_opener_romfs
 
 Follow up the building and flashing procedure
 
-#### Building the Door Final Effector
+#### Building the Final Effector
 
 Set the config profile variable to select the final effector application.
 
