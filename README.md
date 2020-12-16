@@ -1,4 +1,4 @@
-# micro-ROS_warehouse_demo
+# Warehouse demo
 
 The series of micro-ROS real-life demos have proven yet the maturity and efficiency of the micro-ROS framework. The warehouse demo is no exception to it.
 
