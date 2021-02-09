@@ -42,7 +42,8 @@ waypoint_door_outside_rpy = [0, 0, 0]
 waypoint_light = [2.4,1.0]
 waypoint_light_rpy = [0, 0, 0]
 
-global_wait_on_start = False
+global_wait_on_start = True
+global_test_assume_goal_reached = True
 
 
 def handler(signal_received, frame):
@@ -142,6 +143,9 @@ class NAVIGATE_TO_HUMIDITY_SENSOR(smach.State):
             if not query_yes_no("Go to humidity sensor?"):
                 return 'failure'
         while True:
+            if global_test_assume_goal_reached:
+                print("Assumed that goal is reached - only for test purposes")
+                return 'next'
             clear_costmap()
             print("Go to humidity sensor!")
             movebase = MoveBaseClient()
@@ -216,6 +220,9 @@ class NAVIGATE_TO_DOOR_OPENER_IN(smach.State):
             if not query_yes_no("Go to the door inside warehouse?"):
                 return 'failure'
         while True:
+            if global_test_assume_goal_reached:
+                print("Assumed that goal is reached - only for test purposes")
+                return 'next'
             clear_costmap()
             movebase = MoveBaseClient()
             goal = MoveBaseGoal()
@@ -342,6 +349,9 @@ class NAVIGATE_TO_DOOR_OPENER_OUT(smach.State):
             if not query_yes_no("Go to the door outside warehouse?"):
                 return 'failure'
         while True:
+            if global_test_assume_goal_reached:
+                print("Assumed that goal is reached - only for test purposes")
+                return 'next'
             clear_costmap()
             movebase = MoveBaseClient()
             goal = MoveBaseGoal()
@@ -390,6 +400,9 @@ class NAVIGATE_TO_LIGHT(smach.State):
             if not query_yes_no("Go to light?"):
                 return 'failure'
         while True:
+            if global_test_assume_goal_reached:
+                print("Assumed that goal is reached - only for test purposes")
+                return 'next'
             clear_costmap()
             print("Wait for GPS fix")
             time.sleep(10.0) #to got GPS fix

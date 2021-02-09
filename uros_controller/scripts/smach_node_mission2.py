@@ -42,7 +42,8 @@ waypoint_door_outside_rpy = [0, 0, 0]
 waypoint_light = [2.4,1.0]
 waypoint_light_rpy = [0, 0, 0]
 
-global_wait_on_start = False
+global_wait_on_start = True
+global_test_assume_goal_reached = True
 
 
 def handler(signal_received, frame):
@@ -142,6 +143,9 @@ class NAVIGATE_TO_HUMIDITY_SENSOR(smach.State):
             if not query_yes_no("Go to humidity sensor?"):
                 return 'failure'
         while True:
+            if global_test_assume_goal_reached:
+                print("Assumed that goal is reached - only for test purposes")
+                return 'next'
             clear_costmap()
             print("Go to humidity sensor!")
             movebase = MoveBaseClient()
@@ -221,6 +225,9 @@ class NAVIGATE_TO_DOOR_OPENER_IN(smach.State):
             if not query_yes_no("Go to the door inside warehouse?"):
                 return 'failure'
         while True:
+            if global_test_assume_goal_reached:
+                print("Assumed that goal is reached - only for test purposes")
+                return 'next'
             clear_costmap()
             movebase = MoveBaseClient()
             goal = MoveBaseGoal()
@@ -260,6 +267,9 @@ class NAVIGATE_TO_DOOR_OPENER_IN_TO_OPEN(smach.State):
             if not query_yes_no("Go to the door inside warehouse?"):
                 return 'failure'
         while True:
+            if global_test_assume_goal_reached:
+                print("Assumed that goal is reached - only for test purposes")
+                return 'next'
             clear_costmap()
             movebase = MoveBaseClient()
             goal = MoveBaseGoal()
@@ -299,6 +309,9 @@ class NAVIGATE_TO_DOOR_OPENER_OUT_BEFORE_DOOR(smach.State):
             if not query_yes_no("Go to the door outside warehouse?"):
                 return 'failure'
         while True:
+            if global_test_assume_goal_reached:
+                print("Assumed that goal is reached - only for test purposes")
+                return 'next'
             clear_costmap()
             movebase = MoveBaseClient()
             goal = MoveBaseGoal()
@@ -473,6 +486,9 @@ class NAVIGATE_TO_DOOR_OPENER_OUT(smach.State):
             if not query_yes_no("Go to the door outside warehouse?"):
                 return 'failure'
         while True:
+            if global_test_assume_goal_reached:
+                print("Assumed that goal is reached - only for test purposes")
+                return 'next'
             clear_costmap()
             movebase = MoveBaseClient()
             goal = MoveBaseGoal()
@@ -501,34 +517,6 @@ class NAVIGATE_TO_DOOR_OPENER_OUT(smach.State):
         
         return 'next'
 
-# class NAVIGATE_TO_START_POS(smach.State):
-#     def __init__(self):
-#         smach.State.__init__(self, outcomes=['next','failure'])
-#         # State init
-
-    def execute(self, userdata):
-        # read position
-        movebase = MoveBaseClient()
-        goal = MoveBaseGoal()
-        goal.target_pose.header.frame_id = "map"
-        goal.target_pose.header.stamp = rospy.Time.now()
-        goal.target_pose.pose.position.x = waypoint_door_outside[0]
-        goal.target_pose.pose.position.y = waypoint_door_outside[1]
-        quat = quaternion_from_euler(waypoint_door_outside_rpy[0], waypoint_door_outside_rpy[1], waypoint_door_outside_rpy[2])
-        goal.target_pose.pose.orientation.x = quat[0]
-        goal.target_pose.pose.orientation.y = quat[1]
-        goal.target_pose.pose.orientation.z = quat[2]
-        goal.target_pose.pose.orientation.w = quat[3]
-        movebase.send_goal(goal)
-        movebase.wait_for_result()
-        state = movebase.get_state()
-        if state:
-            print("Got door opener position outside: " + str(state))
-        else:
-            print("Door opener outside error: " + str(state))
-        print("Move_base result: " + movebase.get_status_text())
-        
-        return 'next'
 
 class NAVIGATE_TO_START_POS(smach.State):
     def __init__(self):
@@ -550,6 +538,9 @@ class NAVIGATE_TO_LIGHT(smach.State):
             if not query_yes_no("Go to light?"):
                 return 'failure'
         while True:
+            if global_test_assume_goal_reached:
+                print("Assumed that goal is reached - only for test purposes")
+                return 'next'
             clear_costmap()
             print("Wait for GPS fix")
             time.sleep(10.0) #to got GPS fix
@@ -628,7 +619,7 @@ class SYSTEM_FINISH(smach.State):
 
     def execute(self, userdata):
         # Show a green light mission finished or something
-        print("Mission 1 completed!!!!") 
+        print("Mission 2 completed!!!!") 
         print('Press CTRL-C to exit.')
         return 'next'
 
