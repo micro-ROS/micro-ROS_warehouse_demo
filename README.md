@@ -61,7 +61,7 @@ Below a picture picturing the software map:
     * ROS 1 installation [http://wiki.ros.org/ROS/Installation](http://wiki.ros.org/ROS/Installation)
     * ROS 1 usage [http://wiki.ros.org/ROS/Tutorials](http://wiki.ros.org/ROS/Tutorials)
  
-2. Install the ROS 1 package [uros_controller](uros_controller) as following. **Beware that the waypoints are set according to the PIAP's warehouse. Modifications should be done to one's usage**.
+2. Install the ROS 1 package [uros_controller](uros_controller) as following. **Beware that the waypoints are set according to the Lukasiewicz-PIAP's warehouse. Modifications should be done to one's usage**.
 
 3. Additionally to ROS1, ROS2 **foxy** shall be installed and run as explained below:
 
@@ -134,8 +134,10 @@ apt install -y genromfs vim
 #### Complete configuration with micro-ros DEMO BOX messages and the convenient config file for flashing firmware,
 
 ```bash
-git clone http://10.0.9.18/abratek/uros-ucs.git ./tmp
-cp -r ./tmp/uros_demo/ ./firmware/mcu_ws/uros_demo
+git clone https://github.com/micro-ROS/nuttx_apps.git ./tmp
+cp -r ./tmp/examples/ucs_* ./firmware/mcu_ws/
+<del>git clone http://10.0.9.18/abratek/uros-ucs.git ./tmp </del>
+<del>cp -r ./tmp/uros_demo/ ./firmware/mcu_ws/uros_demo </del>
 cp ./tmp/config_f/flash_dashing.sh ./install/micro_ros_setup/config/nuttx/generic/flash.sh 
 rm -rf tmp/
 ```
